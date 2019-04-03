@@ -1,0 +1,1 @@
+[{"caseyBug1":1,"tutDone":0,"roomID":5,"backpackCheck":0,"talkwizcheck":1,"momGreet":1,"bedroomIntro":1,"lowerTownIntro":1,"gertieGreet":1,"wizToTabbs":0,"tempTextStore":0,"ladybugdiscuss":1,"smithIntro":1,"oldManIntroTreeside":1,"presentCount":1,"CHouseintro":0,"LukeTalk":0,"name":"Michelle","oldManinCHouse":1},50,["MOM'S SANDWICH","BACKPACK","WAND OF GAMELON"]]

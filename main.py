@@ -1,0 +1,52 @@
+#!/usr/bin/python
+#This is an experiment.
+from EnJinn.comnd import instaWrapp, textSettings
+import subprocess
+import platform
+#This is imported for use in the subprocesses AKA different games.
+
+instaWrapp("NOTE: If you load a save file from an incompatible gamemode, you are likely to crash your game.")
+#Initialize your gamemode!
+
+game = ""
+localSpeed, localWidth = ["4", "48"]
+
+def gamemode(game, localSpeed):
+  instaWrapp("Available gamemodes: TABBS (main game), HELP (tutorial), DRAWER (demo), ABBA (easter egg)")
+  instaWrapp("Type the name of the mode you would like to play. If you would like to edit display settings, including disabling the scrolling effect featured in all gamemodes, type SETTINGS or S.")
+  if localSpeed == "0.0": 
+    instaWrapp("The text scrolling effect is currently disabled.")
+  if localSpeed != "0.0":
+    instaWrapp("The text scrolling effect is currently enabled.")
+  game = input("What gamemode are you trying to access? ").upper()
+  return game
+
+#Another note: all input()s are .upper()'d. Just makes it easier.
+
+while platform.system() == "Linux" or platform.system() == "Darwin":
+    if game == "HELP":  #This part runs the tutorial.
+        #I haven't found an easier way to do this.
+        instaWrapp("Loading...")
+        subprocess.run(["python3", "EnJinn/tutorial.py",localSpeed,localWidth])
+    if game == "ABBA":
+        subprocess.run(["python3", "abba.py",localSpeed,localWidth])
+    if game == "DRAWER":
+        subprocess.run(["python3", "drawerGame.py",localSpeed,localWidth])
+    if game == "TABBS":
+        instaWrapp("Work in progress!")
+        instaWrapp("Loading...")
+        subprocess.run(["python3", "Tabbs.py",localSpeed,localWidth])
+    if game == "TEST":
+        subprocess.run(["python3", "test.py"])
+    if game == "BASH":
+        subprocess.run(["bash"])
+    if game == "OLDTABBS":
+        subprocess.run(["python3", "whileLooptabbs.py"]) 
+    if game == "SETTINGS" or game == "S":
+        localSpeed, localWidth = textSettings()       
+        localSpeed = str(localSpeed*100)
+        localWidth = str(localWidth)
+        game = "yeet"
+    else:
+        game = gamemode(game, localSpeed)
+print("If you see this message, you're probably running on an unsupported OS. Try running the .py file for your desired gamemode directly.")
