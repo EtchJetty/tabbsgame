@@ -302,7 +302,33 @@ def what(cmd, avail_locs, inventory, room_objs, storyProg, gold, textSpeedGLOBAL
         print("Teleporting to " + str(storyProg["roomID"]) + "...")
         if storyProg["roomID"] == 420:
             print("blaze dude")
-
+    if cmd == "PROPHECY" and "PROPHECY" in inventory:
+          wrapp("THE PROPHECY")
+          wrapp("As Time will tell, the story goes,")
+          wrapp("A curse befalls the living, those")
+          wrapp("who Dedicate their lives to Good,")
+          wrapp("Who fought the Evil where it stood.")
+          print()
+          wrapp("A town is picked, a darkness wrought")
+          wrapp("A pair of heroes, not for nought")
+          wrapp("A Change befalls the hero’s friend")
+          wrapp("Potentially, they meet their end.")
+          print()
+          wrapp("If that be the case, head to the Capital,")
+          wrapp("The Elder beside you, you won’t need a map at all.")
+          wrapp("Friends by your side, the Evil fought off,")
+          wrapp("The curse’s destruction... ")
+          print()
+          wrapp("(The page is burned here. An entire verse seems to be missing.)")
+          wrapp("(It continues...)")
+          print()
+          wrapp("...but heed this warning, hesitate,")
+          wrapp("Before the hero's one and eight")
+          wrapp("The curse cannot be touched, don’t try")
+          wrapp("Else all of man will Sleep")
+          wrapp("For all of Time.")
+          print()
+          wrapp("You have been warned.")
     if cmd == "BACKPACK" and "BACKPACK" in inventory:
         wrapp("Your backpack!")
         wrapp(
@@ -321,6 +347,9 @@ def what(cmd, avail_locs, inventory, room_objs, storyProg, gold, textSpeedGLOBAL
     if cmd == "MOM'S SANDWICH" and "MOM'S SANDWICH" in inventory:
         wrapp("A homemade sandwich from mom.")
         wrapp("A lot of love was put into this.")
+    if cmd == "ADDINV":
+        item = input("item to add? ")
+        addInv(inventory, item)
     return cmd, storyProg, textSpeedGLOBAL, textWidthGLOBAL, name, gold, inventory
 
 
@@ -356,6 +385,7 @@ def tutorialWhat(cmd, avail_locs, inventory, room_objs, storyProg, gold, textSpe
             cmd = input("What do you do? ").upper()
             lbreak()
     while cmd == "TRAVEL" or cmd == "T":
+      print("Below are all available movement options:")
       for location in range(len(avail_locs) - 1):
           print(end="(")
           print(avail_locs[location][:1],end="")
@@ -368,6 +398,7 @@ def tutorialWhat(cmd, avail_locs, inventory, room_objs, storyProg, gold, textSpe
       cmd = input("What do you do? ").upper()
       lbreak()
     while cmd == "ACT" or cmd == "A":
+      print("Below is a list of interactable objects:")
       if room_objs == []:
                 print("Nothing here is interactable.")
                 print("Try TRAVELling!")

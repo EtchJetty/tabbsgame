@@ -24,7 +24,8 @@ varlist = [
     "caseyBug1", "tutDone", "roomID", "backpackCheck", "talkwizcheck",
     "momGreet", "bedroomIntro", "lowerTownIntro", "gertieGreet", "wizToTabbs",
     "tempTextStore", "ladybugdiscuss", "smithIntro", "oldManIntroTreeside",
-    "presentCount", "CHouseintro", "LukeTalk", "room7intro", "oldManinCHouse","wellIntro","age","tabbsChambIntro"
+    "presentCount", "CHouseintro", "LukeTalk", "room7intro", "oldManinCHouse",
+    "wellIntro", "age", "tabbsChambIntro"
 ]
 
 storyProg = vardef(storyProg, varlist)
@@ -55,9 +56,9 @@ if prologue == 1:
         wrapp("Player...")
     elif yeetBye == "LOAD":
         print("Loading...")
-        with open('data.txt') as json_file:  
-          saveFileContent = json.load(json_file)
-          storyProg,gold,inventory = saveFileContent
+        with open('data.txt') as json_file:
+            saveFileContent = json.load(json_file)
+            storyProg, gold, inventory = saveFileContent
         print("Load complete!")
         skipProlg = 1
         name = storyProg["name"]
@@ -65,14 +66,14 @@ if prologue == 1:
         print("Copy/paste your save file below:")
         custfile = input()
         saveFileContent = json.loads(custfile)
-        storyProg,gold,inventory = saveFileContent
+        storyProg, gold, inventory = saveFileContent
         skipProlg = 1
         name = storyProg["name"]
     else:
-      goodName = 0
-      wrapp("Good.")
-      wrapp("You have chosen well.")
-      wrapp("Player...")
+        goodName = 0
+        wrapp("Good.")
+        wrapp("You have chosen well.")
+        wrapp("Player...")
     while goodName == 0:
         name = input("What is your name? ")
         name = string.capwords(name)
@@ -118,7 +119,7 @@ if prologue == 1:
             exit()
         if name == "Tabbs":
             wrapp("Silly...")
-            wrapp("You can't take tabbs's name...")
+            wrapp("You can't take Tabbs's name...")
             wrapp("Pick something elssse.")
         if name == "Jai":
             wrapp("The true name.")
@@ -136,26 +137,30 @@ if prologue == 1:
         if name == "Monty":
             wrapp("...Hah! You want to take my name! That's funny! That's...")
             wrapp("...you're serious, aren't you?")
-            wrapp("Okay, um. I have to tell you that you can't take my name. Pick another.")
+            wrapp(
+                "Okay, um. I have to tell you that you can't take my name. Pick another."
+            )
         if name == "Sebestos":
             wrapp("...weird choice, but okay.")
         if name != "Tabbs" and name != "Casey" and name != "Mom" and name != "Vimm" and name != "Dad" and name != "Gertrude" and name != "" and name != "Luke" and name != "Monty" and name != "Def":
             goodName = 1
         lbreak()
     if skipProlg == 0:
-      wrapp("Your name is " + name + ".")
-      wrapp("Your best friend, Casey, is [     ].")
-      wrapp("Now awaken, Chosen, and face your fate...")
-      lbreak()
-      wrapp("You wake up, rolling out of bed.")
-      wrapp("Yawning, you stretch, making a bit of a silly noise as you do so.")
-      wrapp("Yesterday was your twelfth birthday!")
-      wrapp(
-          "You were a little disappointed Casey wasn't able to show up to the celebrations, though."
-      )
-      wrapp(
-          "You take stock of your surroundings as the last remnants of sleep leave your eyes."
-      )
+        wrapp("Your name is " + name + ".")
+        wrapp("Your best friend, Casey, is [     ].")
+        wrapp("Now awaken, Chosen, and face your fate...")
+        lbreak()
+        wrapp("You wake up, rolling out of bed.")
+        wrapp(
+            "Yawning, you stretch, making a bit of a silly noise as you do so."
+        )
+        wrapp("Yesterday was your twelfth birthday!")
+        wrapp(
+            "You were a little disappointed Casey wasn't able to show up to the celebrations, though."
+        )
+        wrapp(
+            "You take stock of your surroundings as the last remnants of sleep leave your eyes."
+        )
 storyProg.update({"name": name})
 
 while game == 1:
@@ -552,8 +557,22 @@ while game == 1:
             if storyProg["oldManinCHouse"] != 99 and storyProg[
                     "oldManinCHouse"] != 3:
                 wrapp("Gertrude is knitting.")
-                if storyProg["oldManinCHouse"] == 2:
+                if storyProg["oldManinCHouse"] == 2 or storyProg[
+                        "oldManinCHouse"] == 4:
                     wrapp("She is pointedly ignoring the old man.")
+                elif storyProg["oldManinCHouse"] == 50:
+                    wrapp("Monty turns to you.")
+                    wrapp(
+                        "\"" + name +
+                        ",\" he says. \"The journey we're about to embark on may be long and difficult. We may encounter some terrible challenges, nearly unkillable monsters, or truly evil people. So I want you to prepare yourself by buying something for yourself from the shop in the smithy.\""
+                    )
+                    wrapp("He hands you 10 gold pieces, which you pocket.")
+                    gold = 10
+                    wrapp("\"" + name + ", purchase something wisely.\"")
+                    wrapp(
+                        "\"When you get back from the smithy, I'll give you a road pass, and we'll be on our way.\""
+                    )
+                    storyProg["oldManinCHouse"] = 4
             elif storyProg["oldManinCHouse"] == 99:
                 wrapp(
                     "Gertrude has temporarily stopped her knitting, and is conversing with the old man. Their conversation stops when they see you."
@@ -567,7 +586,7 @@ while game == 1:
                 "You can hear the slight crackling of the furnace in the smithy behind you, as well as the occasional clang of tools."
             )
             wrapp("The guard is at his post.")
-        if storyProg["oldManinCHouse"] == 2:
+        if storyProg["oldManinCHouse"] == 2 or storyProg["oldManinCHouse"] == 4:
             room_objs.append("OLD MAN")
         optlist()
         cmd, storyProg, textSpeedGLOBAL, textWidthGLOBAL, name, gold, inventory = what(
@@ -602,6 +621,38 @@ while game == 1:
             wrapp(
                 "He shrugs helplessly. \"But it's out of my hands, really. Sorry, "
                 + name + ". Really, I am.\"")
+
+        if cmd == "ROAD" and "ROAD PASS" in inventory and storyProg["oldManinCHouse"] == 5 or cmd == "R" and "ROAD PASS" in inventory and storyProg["oldManinCHouse"] == 5:
+            wrapp("You walk towards the road. Monty follows.")
+            wrapp(
+                "As you approach the guard's post, he asks, \"Do you have a pass to leave town?\""
+            )
+            wrapp("As a matter of fact, you do. And you show the guard the road pass, waving it in front of you proudly.")
+            wrapp("\"Woah, okay. You do have a road pass. Monty give this to you?\"")
+            wrapp("You nod.") 
+            wrapp("\"Alright, then, " + name + ", head on out. You've got Monty with you, so I trust you'll be okay.\"")
+            wrapp("\"I shall return " + name + "safe and sound, I promise,\" says Monty. \"Tell " + name + "'s mother we're heading out. Shouldn't be too long.\"")
+            wrapp("The ladybug on your hand flutters its wings slightly.")
+            wrapp("\"Okay, then,\" says the guard. The road is now free for your perusal. See you soon!\"")
+            wrapp("\"Thank you, Leon,\" says Monty. \"We'll be back before you know it.\"")
+            print()
+            lbreak()
+            print()
+            wrapp("Now would be a good time to save, as it will be your last opportunity to return to town for some time. To save, simply type SAVE at any time.")
+            wrapp("Would you like to save?")
+            cmd, storyProg, textSpeedGLOBAL, textWidthGLOBAL, name, gold, inventory = what(
+            cmd, avail_locs, inventory, room_objs, storyProg, gold,
+            textSpeedGLOBAL, textWidthGLOBAL, name)
+            wrapp("To leave town, simply type ROAD once more.")
+            storyProg["oldManinCHouse"] = 6
+            cmd = ""
+        if cmd == "ROAD" and "ROAD PASS" in inventory and storyProg["oldManinCHouse"] == 6 or cmd == "R" and "ROAD PASS" in inventory and storyProg["oldManinCHouse"] == 6:
+            wrapp("\"Well,\" says Monty. \"Let's get going.\"")
+            wrapp("You follow Monty out of town, the ladybug having migrated to your shoulder. Tabbs peeks out at you from around Monty's cloak, but says nothing.")
+            print()
+            wrapp("END OF CHAPTER ONE")
+            print()
+            storyProg["roomID"] = 10
         if cmd == "WELL" and storyProg[
                 "oldManinCHouse"] != 3 or cmd == "WE" and storyProg[
                     "oldManinCHouse"] != 3:
@@ -612,29 +663,88 @@ while game == 1:
             )
             wrapp("You hope the wish reaches Casey.")
         if cmd == "OLD MAN" and "OLD MAN" in room_objs or cmd == "OL" and "OLD MAN" in room_objs:
-            wrapp("\"" + name + ", you asked to see where Tabbs lived, yes?\"")
-            wrapp("You nod.")
-            wrapp(
-                "He hesitates for a moment, glancing at Gertrude, but she doesn't react. Then he continues."
-            )
-            wrapp(
-                "\"She lives in here,\" he says, and for a second you think she's dead and he was going to point to his heart as a metaphor for a person's memory living on after death, but then he gestures towards the well."
-            )
-            wrapp(
-                "You look down the well. Notably, you don't see anyone, certainly nobody named Tabbs."
-            )
-            wrapp(
-                "The old man watches you lean over the edge and chuckles. \"She's deeper down,\" he says. \"There's a tunnel, and you have to climb a magic ladder on the way down. I'll activate it for you.\""
-            )
-            wrapp(
-                "The old man taps his staff against the side of the well and a small, blue spark comes out of the tip. It swirls about in the center of the well for a moment, before abruptly dropping. As it falls, it splits sparks off of itself, which attach to the wall of the well and grow to form glowing, blue handhelds."
-            )
-            wrapp(
-                "With practiced, smooth movement, the old man vaults himself over the edge of the wall and climbs down the glowing ladder."
-            )
-            wrapp("Halfway to the bottom, you hear the old man shout, \"" +
-                  name + "! Are you coming down or what? \"")
-            storyProg["oldManinCHouse"] = 3
+            if storyProg["oldManinCHouse"] == 2:
+                wrapp("\"" + name +
+                      ", you asked to see where Tabbs lived, yes?\"")
+                wrapp("You nod.")
+                wrapp(
+                    "He hesitates for a moment, glancing at Gertrude, but she doesn't react. Then he continues."
+                )
+                wrapp(
+                    "\"She lives in here,\" he says, and for a second you think she's dead and he was going to point to his heart as a metaphor for a person's memory living on after death, but then he gestures towards the well."
+                )
+                wrapp(
+                    "You look down the well. Notably, you don't see anyone, certainly nobody named Tabbs."
+                )
+                wrapp(
+                    "The old man watches you lean over the edge and chuckles. \"She's deeper down,\" he says. \"There's a tunnel, and you have to climb a magic ladder on the way down. I'll activate it for you.\""
+                )
+                wrapp(
+                    "The old man taps his staff against the side of the well and a small, blue spark comes out of the tip. It swirls about in the center of the well for a moment, before abruptly dropping. As it falls, it splits sparks off of itself, which attach to the wall of the well and grow to form glowing, blue handhelds."
+                )
+                wrapp(
+                    "With practiced, smooth movement, the old man vaults himself over the edge of the wall and climbs down the glowing ladder."
+                )
+                wrapp("Halfway to the bottom, you hear the old man shout, \"" +
+                      name + "! Are you coming down or what? \"")
+                storyProg["oldManinCHouse"] = 3
+            elif storyProg["oldManinCHouse"] == 4:
+                wrapp("The old man turns around when you approach him.")
+                wrapp("\"Well, " + name +
+                      "? Have you gone to the smith yet?\"")
+                if storyProg["smithIntro"] == 1:
+                    wrapp("You honestly tell him yes.")
+                    wrapp("\"Good!\" he says. \"Did you buy anything?\"")
+                    if "RIDDLER'S FLASK" in inventory:
+                        wrapp("You repeat your affirmation.")
+                        wrapp("\"Wonderful!\" he says.")
+                    else:
+                        wrapp(
+                            "\"...that's fine, I guess,\" says Monty. \"That you didn't buy anything. Shows confidence. Which you'll need.\""
+                        )
+                    wrapp(
+                        "\"Anyway, I've made nearly all my preperations. So we can get going as soon as I...\""
+                    )
+                    wrapp(
+                        "As he talks, you notice the ladybug from earlier flying around behind Monty. You zone out a little, staring straight at the ladybug. It flies in a lazy circle, wings beating hundreds of times every few seconds. The ladybug makes its way past the snake on Monty's neck, who lifts her head and sticks out her tongue briefly in its direction, but the ladybug doesn't fly close enough to Tabbs to truly be in danger."
+                    )
+                    wrapp(
+                        "On instinct, you turn your palm up. If the ladybug landed on your hand, that was good luck, right?"
+                    )
+                    wrapp(
+                        "The ladybug hovers above your palm for a moment before slowly lowering itself down. You don't move a muscle."
+                    )
+                    wrapp(
+                        "You stare at the ladybug's carapace. Six black spots, exactly three on both sides. They each form a rough triangle, both ends pointing towards each other."
+                    )
+                    wrapp("The ladybug slowly begins crawling up your arm.")
+                    wrapp(
+                        "\"...so if we want to make it to Bashapt before sundown tomorrow, we're going to have to really start moving. "
+                        + name + "? What do you think of that plan?\"")
+                    wrapp(
+                        "You blink, looking up at Monty. You nod, hoping the movement wouldn't disturb the ladybug."
+                    )
+                    wrapp("\"Perfect,\" he says. \"Here, " + name +
+                          ". Take this road pass.\"")
+                    addInv(inventory, "ROAD PASS")
+                    wrapp("\"Let's go, " + name +
+                          ". We're heading out to the road.\"")
+                    storyProg["oldManinCHouse"] = 5
+                    wrapp(
+                        "You look back at your palm, but the ladybug is gone. You panic silently for a moment, worried that you've hurt the ladybug, until you feel a tickling near your ear."
+                    )
+                    wrapp(
+                        "You crane your neck just enough to be able to see that the ladybug has landed on your shoulder."
+                    )
+                    wrapp("...huh. Okay.")
+                else:
+                    wrapp("You tell him no.")
+                    wrapp("\"Well, you probably should do that,\" he says.")
+                    wrapp(
+                        "He then turns around and proceeds to ignore you, cracking open his spellbook."
+                    )
+            elif storyProg["oldManinCHouse"] == 5:
+              wrapp("\"Go on, then,\" says Monty. \"Talk to the guard, he'll let us out.\"")
         if cmd == "WELL" and "WELL" in avail_locs or cmd == "W" and "WELL" in avail_locs:
             wrapp("Very, very carefully, you make your way down the well.")
             storyProg["roomID"] = 8
@@ -651,7 +761,8 @@ while game == 1:
             wrapp(
                 "She gives you a toothy grin. \"You probably feel mostly the same, right? Well, that's aging for you! One day you're twelve, you don't feel anything different, and before you know it you're the rich age of I-don't-even-remember!\""
             )
-            if storyProg["oldManinCHouse"] != 2:
+            if storyProg["oldManinCHouse"] != 2 or storyProg[
+                    "oldManinCHouse"] != 4 or storyProg["oldManinCHouse"] != 3:
                 wrapp(
                     "\"Oh! And I forgot to tell you, but the old man asked me to tell you to see him. He's near the lookout at Treeside, where he usually is.\""
                 )
@@ -662,9 +773,14 @@ while game == 1:
             cmd = talkwhat(cmd, TalkOptions)
             while convoTree == 1:
                 if cmd == "OLD MAN" and "OLD MAN" in TalkOptions or cmd == "O" and "OLD MAN" in TalkOptions:
-                    if storyProg["oldManinCHouse"] == 2:
+                    if storyProg["oldManinCHouse"] == 2 or storyProg[
+                            "oldManinCHouse"] == 4:
                         wrapp(
                             "\"...Monty and I go way back,\" she says after some hesitation, avoiding eye contact with him. \"But I won't bore you with the details. Long story short, we had a falling out before you were old enough to remember.\" She shakes her head. \"It's ancient history now.\""
+                        )
+                    elif storyProg["oldManinCHouse"] == 3:
+                        wrapp(
+                            "\"The crazy coot just jumped down a well, kid. I think that's all the information you really need about him.\""
                         )
                     else:
                         wrapp(
@@ -723,7 +839,9 @@ while game == 1:
                         wrapp(
                             "\"I think Monty is looking a little anxious, though. Talk to him!\""
                         )
-                    else:
+                    if storyProg["oldManinCHouse"] != 4 or storyProg[
+                            "oldManinCHouse"] != 3 or storyProg[
+                                "oldManinCHouse"] != 2:
                         wrapp(
                             "\"Remember, the old man's up the hill, near the lookout!\""
                         )
@@ -1043,17 +1161,42 @@ while game == 1:
                 "In addition to all of this, Casey's house has a second floor, the only house to have one in town, excluding your own, of course. This is supported by a wooden beam in the middle of the room, which you've accidentally sleepwalked into more times than you care to admit."
             )
             wrapp(
-                "The first thing you notice when you enter is Casey's dad sitting on a couch, listening to Old Man Monty talk. You're not good enough at reading faces to be sure, but Casey's dad could be holding back tears."
+                "The first thing you notice when you enter is Casey's dad sitting on a couch, conversing with old man Monty. You're not good enough at reading faces to be sure, but Casey's dad could be holding back tears."
             )
-            wrapp("The old man stops saying what he was going to say.")
+            wrapp("They don't seem to have noticed you.")
+            wrapp("You...")
+            TalkOptions = ["EAVESDROP"]
+            talklist()
+            cmd = talkwhat(cmd, TalkOptions)
+            wrapp(
+                "From where you are, you can barely make out the pair's conversation. You tiptoe over just in time to catch old man Monty asking Luke a question.."
+            )
+            wrapp(
+                "\"And you're sure she was in her bed before you fell asleep?\" he asks. \"Completely immobile from her illness?\""
+            )
+            wrapp(
+                "Luke sighs deeply. \"I've told you everything, Monty. She was in bed, still as sick as she was yesterday, when I finally dozed off in the chair. I open my eyes and it's six hours later, and she's gone. That is all I know.\""
+            )
+            wrapp(
+                "\"Was she in any distress? Did she report any strange dreams?\" Monty is looming over Luke. \"What was she wearing before she disappeared? Please, Luke, this is important!\""
+            )
+            wrapp(
+                "Luke stands up suddenly, fury in his eyes. \"Alright, old man,that's enough. I don't know how in the hells you found out my daughter disappeared before I told anyone, but I don't like the direction these questions are going. If you're not going to help, get the hell out of my house.\"" 
+            )
+            wrapp(
+                "Monty stands up too, indignantly, and almost says something before he notices you out of the corner of his eye."
+            )
+            wrapp(
+                "The old man stops saying what he was going to say and turns to face you."
+            )
             wrapp(
                 "\"Ah, " + name +
-                ", you're here,\" he says. He turns to Casey's dad. \"I'm sorry, Luke, I'm going to have to cut this a little short. "
+                ", you're here,\" he says. He turns back to Casey's dad. \"I'm sorry, Luke, I'm going to have to cut this a little short. "
                 + name +
                 ", please meet me outside. We, ah, have some things that need dicussing.\""
             )
             wrapp(
-                "Monty gets up, leaving Casey's dad sitting on the couch, staring at the old man's retreating figure."
+                "Monty walks away, leaving Casey's dad to sit back down on the couch, staring at the old man's retreating figure."
             )
             wrapp(
                 "Luke sits there a moment longer, watching as the door closes, before turning to you slowly, and attempting to put on a happy face. He gives up halfway through the attempt."
@@ -1233,51 +1376,398 @@ while game == 1:
     while storyProg["roomID"] == 8:
         lbreak()
 
-       # wip()
+        # wip()
         avail_locs = ["SEWER"]
         room_objs = ["BUCKET"]
-        wrapp("You are at the bottom of the well, standing on a ledge surrounding the water.")
-        wrapp("Loosely hanging beside you is the bucket used for bringing water up.")
+        wrapp(
+            "You are at the bottom of the well, standing on a ledge surrounding the water."
+        )
+        wrapp(
+            "Loosely hanging beside you is the bucket used for bringing water up."
+        )
         if storyProg["wellIntro"] == 0:
-          wrapp("The well is... damp. Musty. Cold.")
-          wrapp("You shiver at the atmosphere. Was this really where Monty's friend lived?")
-          wrapp("Monty glances at you. \""+name+",\" he says. \"Follow me, we're going deeper into a tunnel. Tabbs resides down there.\"")
-          wrapp("He walks away on the sewer ledge, leaving a trail of lingering blue sparks with each footstep.")
-          wrapp("The ladder disappears as he does so.")
-          storyProg["wellIntro"] = 1
+            if storyProg["oldManinCHouse"] == 4:
+                wrapp("Monty and Tabbs follow you out of Tabbs's chamber.")
+                wrapp(
+                    "\"We're going up,\" says Monty. He holds his staff into the air, and the same blue spark from earlier flies from the top. It hovers in midair for a moment before breaking off a smaller version of itself, forming the lowest rung of the ladder. As soon as that spark solidified into the electric blue ladder you had climbed down, the main spark rockets up the well, splitting itself off at appropriate intervals to form the rest of the ladder."
+                )
+                wrapp(
+                    "You reach for the ladder before a thought occurs to you.")
+                wrapp(
+                    "You ask the old man how Tabbs was supposed to climb up the ladder without legs."
+                )
+                wrapp(
+                    "He ponders this question for a moment. \"Well, that's actually--\""
+                )
+                wrapp(
+                    "Tabbs interrupts him. \"Tabbs can... ssssshift back into smaller Tabbssss,\" she says. \"Not painful... but Tabbs doesn't like the feeling of being ssssso sssssmall...\""
+                )
+                wrapp(
+                    "Monty looks at her, startled. \"You can do that? You would do that?\""
+                )
+                wrapp(
+                    "Tabbs looks at her hands. \"Only temporary,\" she says, \"can grow again... but ssstill unpleasant. But if Tabbs can leave the well...\""
+                )
+                wrapp(
+                    "Tabbs closes her eyes. As you watch, her arms melt away into her body, her hair vanishing before your eyes. Within only moments, where Tabbs stood was a giant snake with no semblance of humanity in its appearance at all. Then it begins to shrink."
+                )
+                wrapp(
+                    "By the time you've finished processing what you just witnessed, Monty's already picked up the smaller form of Tabbs, who slithered around his neck."
+                )
+                wrapp(
+                    "\"Well, are you ready?\" he asks the snake. She nods. Then Monty turns to you. \"Jai, lead the way.\""
+                )
+                storyProg["oldManinCHouse"] = 50
+                storyProg["wellIntro"] = 2
+                avail_locs.append("LADDER")
+            else:
+                wrapp("The well is... damp. Musty. Cold.")
+                wrapp(
+                    "You shiver at the atmosphere. Was this really where Monty's friend lived?"
+                )
+                wrapp(
+                    "Monty glances at you. \"" + name +
+                    ",\" he says. \"Follow me, we're going deeper into a tunnel. Tabbs resides down there.\""
+                )
+                wrapp(
+                    "He walks away on the sewer ledge, leaving a trail of lingering blue sparks with each footstep."
+                )
+                wrapp("The ladder disappears as he does so.")
+                storyProg["wellIntro"] = 1
+        elif storyProg["wellIntro"] == 2:
+            wrapp("Monty and Tabbs are waiting for you to climb up.")
+            avail_locs.append("LADDER")
         optlist()
         cmd, storyProg, textSpeedGLOBAL, textWidthGLOBAL, name, gold, inventory = what(
             cmd, avail_locs, inventory, room_objs, storyProg, gold,
             textSpeedGLOBAL, textWidthGLOBAL, name)
         if cmd == "BU" or cmd == "BUCKET":
-          wrapp("A bucket. Used for bringing water up and down from the underground river, the one you're standing precariously close to.")
-          wrapp("It's connected to the upper areas via a pulley system.")
+            wrapp(
+                "A bucket. Used for bringing water up and down from the underground river, the one you're standing precariously close to."
+            )
+            wrapp("It's connected to the upper areas via a pulley system.")
+        if cmd == "LADDER" and "LADDER" in avail_locs or cmd == "L" and "LADDER" in avail_locs:
+            wrapp(
+                "You climb up the ladder. Monty, with Tabbs wrapped around his neck, follow shortly behind you."
+            )
+            wrapp("The two of you climb over the edge of the well.")
+            storyProg["roomID"] = 3
         if cmd == "S" or cmd == "SE":
-          wrapp("You follow Monty's blue footprints and head deeper into the sewer.")
-          wrapp("You turn the corner and see Monty standing outside an archway, staring inside. You begin to make your way to it, but right before you enter the next room, Monty stops you, holding a hand out to block your entrance.")
-          wrapp("\"You are about to meet with Tabbs,\" he warns you. \"And despite everything I said about her being true, she is my friend, I have to be completely honest. She is not all there.\"")
-          wrapp("Monty turns around to face you. His countenance is tight, mouth set in a grim line as he speaks. \"Years ago, she was afflicted by a curse that severely distorted her physical being. This was eventually partially undone, but her mental state never recovered.\"")
-          wrapp("You swallow.")
-          wrapp("\"I believe your friend Casey underwent a similar curse. But the rest is Tabbs's story to tell.\"")
-          wrapp("You try and peer into the doorway beyond. It seems pitch-black, but you can hear something moving.")
-          wrapp("The unspoken question is clear to both you and Monty. \"I'll tell you the details later,\" he says. \"For now, just promise me one thing.\"")
-          wrapp("You nod uncertainly.")
-          wrapp("\"Tabbs will ask you your age. From this moment on, you are eighteen years old or older. Do you hear me? How old are you?\"")
-          convoTree = 1
-          while convoTree == 1:
-            try:
-              storyProg["age"] = int(input("Enter a number. "))
-            except ValueError:
-              storyProg["age"] = 0
-            if storyProg["age"] >= 18:
-              wrapp("Monty sighs in relief. \"Good. Good! Just say that number and everything should be all right.\"")
-              wrapp("He steps aside, and you enter the chamber.")
-              wrapp("As you step inside, you hear Monty say a whispered \"Good luck.\"")
-              convoTree = 0
-              storyProg["roomID"] = 9
-            else:
-              wrapp("\"" + name + ", I'm serious. What do you say if Tabbs asks you your age?\"")
+            if storyProg["oldManinCHouse"] == 3:
+                wrapp(
+                    "You follow Monty's blue footprints and head deeper into the sewer."
+                )
+                wrapp(
+                    "You turn the corner and see Monty standing outside an archway, staring inside. You begin to make your way to it, but right before you enter the next room, Monty stops you, holding a hand out to block your entrance."
+                )
+                wrapp(
+                    "\"You are about to meet with Tabbs,\" he warns you. \"And despite everything I said about her being true, she is my friend, I have to be completely honest. She is not all there.\""
+                )
+                wrapp(
+                    "Monty turns around to face you. His countenance is tight, mouth set in a grim line as he speaks. \"Years ago, she was afflicted by a curse that severely distorted her physical being. This was eventually partially undone, but her mental state never recovered.\""
+                )
+                wrapp("You swallow.")
+                wrapp(
+                    "\"I believe your friend Casey underwent a similar curse. But the rest is Tabbs's story to tell.\""
+                )
+                wrapp(
+                    "You try and peer into the doorway beyond. It seems pitch-black, but you can hear something moving."
+                )
+                wrapp(
+                    "The unspoken question is clear to both you and Monty. \"I'll tell you the details later,\" he says. \"For now, just promise me one thing.\""
+                )
+                wrapp("You nod uncertainly.")
+                wrapp(
+                    "\"Tabbs will ask you your age. From this moment on, you are eighteen years old or older. Do you hear me? How old are you?\""
+                )
+                convoTree = 1
+                while convoTree == 1:
+                    try:
+                        storyProg["age"] = int(input("Enter a number. "))
+                    except ValueError:
+                        storyProg["age"] = 0
+                    if storyProg["age"] >= 18:
+                        wrapp(
+                            "Monty sighs in relief. \"Good. Good! Just say that number and everything should be all right.\""
+                        )
+                        wrapp("He steps aside, and you enter the chamber.")
+                        wrapp(
+                            "As you step inside, you hear Monty say a whispered \"Good luck.\""
+                        )
+                        convoTree = 0
+                        storyProg["roomID"] = 9
+                    else:
+                        wrapp(
+                            "\"" + name +
+                            ", I'm serious. What do you say if Tabbs asks you your age?\""
+                        )
+                else:
+                    wrapp("You look into the darkness of the sewer.")
+                    wrapp(
+                        "It's too dark to see without the old man leading the way..."
+                    )
+                    wrapp("You decide not to risk it.")
     while storyProg["roomID"] == 9:
+        lbreak()
+
+        avail_locs = ["WELL"]
+        room_objs = ["SKELETONS", "TABBS", "MONTY"]
+
+        wrapp("You are in Tabbs's chamber.")
+        if storyProg["tabbsChambIntro"] == 0:
+            wrapp(
+                "At first, you don't see any living person. The room is nearly pitch black, with the only light coming from Monty's glowing footprints. Any tiny rays of light that managed to come from the open well far away didn't make it past a few feet into the room."
+            )
+            wrapp(
+                "This limited light, however, allows you to see that the floor is littered with animal bones."
+            )
+            wrapp(
+                "You just about avoid stepping on a tiny ribcage when you glimpse movement in front of you."
+            )
+            wrapp("You...")
+            TalkOptions = ["CALL OUT", "DO NOTHING"]
+            talklist()
+            cmd = talkwhat(cmd, TalkOptions)
+            if cmd == "C" or cmd == "CALL OUT":
+                wrapp("You call out to Tabbs.")
+            else:
+                wrapp(
+                    "You are suddenly aware of how heavy your breath is. Was it the climb down the ladder that made your heart start pounding?"
+                )
+            wrapp(
+                "Perhaps in reaction to the noise you made, the movement you weren't even 100% sure was there suddenly stops. Then it starts again. A ray of light glints off what you realize are scales, moving closer and closer to you."
+            )
+            wrapp(
+                "You take a step back. The creature, whatever it is, seems to be massive, as it feels like the whole room is coming to life. You look back at Monty, but he nods at you. What's that supposed to mean!?"
+            )
+            wrapp(
+                "Before you have a chance to back out, you hear a hissing noise come from deeper within the chamber. It resolves into a parched, cracked voice."
+            )
+            wrapp("\"Chosen...\" it whispers. \"Chosen... how old iss you?\"")
+            storyProg["tabbsChambIntro"] = 1
+            convoTree = 1
+            while convoTree == 1:
+                try:
+                    storyProg["age"] = int(input("Enter a number. "))
+                except ValueError:
+                    storyProg["age"] = 0
+                wrapp(
+                    "Tabbs, for that is who was talking, comes out of the darkness, and you can finally see her face and most of her upper body."
+                )
+                if storyProg["age"] >= 18:
+                    wrapp(
+                        "Her clothes are tattered, figure gaunt. Tabbs is smiling, but it's not the smile of a healthy woman. In fact, the word you'd use was slightly deranged."
+                    )
+                    wrapp(
+                        "\"Yessss...\" she whispers, almost reverently. \"Chosen... come to Tabbs.\""
+                    )
+                    wrapp(
+                        "She shudders, and you can see something like pleasure run down her spine. You follow it down to her lower body, which is slowly moving into visibility, only to startle when you realize her lower body is that of a giant snake."
+                    )
+                    wrapp(
+                        "This couldn't be real. This was too fantastical to believe. You were going on an adventure, with snake women calling you the \"Chosen,\" and Casey wasn't here with you."
+                    )
+                    wrapp("...was something like what happened to Casey?")
+                    wrapp(
+                        "Tabbs continues, oblivious to your introspection. \"I've waited "
+                        + str(78 + storyProg["age"]) +
+                        " years for thisss...\"")
+                    convoTree = 0
+                    storyProg["oldManinCHouse"] = 9
+                else:
+                    wrapp(
+                        "Her clothes are tattered, figure gaunt. Tabbs is frowning, but it's not the frown of a healthy woman. In fact, the word you'd use was slightly deranged. She's showing too many teeth for you to feel comfortable."
+                    )
+                    wrapp(
+                        "\"Chosen...\" she says, almost a whisper. \"Are you... not yet of age?\" Her voice seems to contain infinite sadness, dry though it may be."
+                    )
+                    convoTree = 0
+            wrapp(
+                "Just then, Monty runs through the gateway. \"The Chosen was joking with that!\" he said, waving his staff to create light. Tabbs recoils slightly at the bright blue orb that suddenly flickers into existence at the top of Monty's staff, but she clearly knows who he is. \"It was a joke! The Chosen is actually bona-fide eighteen-plus years old!\""
+            )
+            if storyProg["age"] >= 18:
+                wrapp(
+                    "Tabbs cocks her head at Monty. \"The Chosen said as much...\" she utters. \"Was it a joke?\""
+                )
+                wrapp(
+                    "Monty backtracks immediately. \"No! It absolutely was not a joke! I'm sorry, I was just confused momentarily!\""
+                )
+                wrapp(
+                    "He glances at you, as if not sure whether he's supposed to be grateful or angry that you followed his intructions. You're not sure whether or not to be grateful that he tried to help or angry he had so little faith in you."
+                )
+            else:
+                wrapp(
+                    "Tabbs instantly relaxes. \"Chosen...\" she says, looking at you. \"A funny joke, yessss... but one that scared Tabbs. Next time just ssssay the truth.\""
+                )
+                wrapp(
+                    "She smiles at you. You have the feeling that Tabbs hadn't smiled in a very long time; it looks alien on her face. And her teeth are... sharp."
+                )
+            wrapp(
+                "Monty takes a deep breath. \"Well,\" he says. \"Can we get down to business?\""
+            )
+            TalkOptions = ["BUSINESS"]
+            talklist()
+            cmd = talkwhat(cmd, TalkOptions)
+            wrapp(
+                "\"Businesssss?\" repeats Tabbs. She looks at Monty with wide eyes. \"Tabbs hasn't done business since... nearly a century ago...\" Her voice trails off into a mumble."
+            )
+            wrapp(
+                "Monty shifts his stance, and leans on his staff. \"I mean business, Tabbs. The prophecy. The Chosen's best friend disappeared a few years ago, and now that we've fulfilled the age requirement of the prophecy we were hoping to begin saving her.\""
+            )
+            wrapp(
+                "You don't have time to contemplate why Monty lied because Tabbs slithers towards the back of the room, faster than you expected from a half-snake."
+            )
+            wrapp(
+                "You hear her rifling through some things, until suddenly the sound of papers shuffling stops. Tabbs turns around towards you, her long tail trailing behind her. In her hands is an ancient-looking piece of parchment, damaged by both the passage of time and slight scorching."
+            )
+            wrapp(
+                "\"The Prophecy,\" states Tabbs, clutching the parchment to her chest. \"It is finally time, Chosen... time to save the one you losssst...\""
+            )
+            wrapp(
+                "Monty turns away from Tabbs to face you. \"" + name +
+                ",\" he says. \"This prophecy should answer nearly every question you have.\" He turns back to Tabbs, and taps the bottom of his staff on the floor of the chamber. The animal bones rattle slightly, and you feel some kind of magical energy rush through you as it fills the room."
+            )
+            wrapp(
+                "You turn to Tabbs. She's looking at the parchment, expression neutral. Then she passes it to Monty, who gravely accepts it."
+            )
+            wrapp("Monty looks at you. \"" + name +
+                  ", are you ready to hear the prophecy?\"")
+            cmd = yesno(cmd)
+            if cmd == "N" or cmd == "NO":
+                wrapp(
+                    "Tabbs hisses. \"Chosen...\" she says. \"You have come here from so far... you must face your fate. Read the prophecy.\""
+                )
+            wrapp(
+                "Monty nods, clearing his throat. You feel another pulse of magical energy as he does so."
+            )
+            wrapp("Finally, Monty opens his mouth, and begins to read.")
+            lbreak()
+            wrapp("THE PROPHECY")
+            wrapp("As Time will tell, the story goes,")
+            wrapp("A curse befalls the living, those")
+            wrapp("who Dedicate their lives to Good,")
+            wrapp("Who fought the Evil where it stood.")
+            print()
+            wrapp("A town is picked, a darkness wrought")
+            wrapp("A pair of heroes, not for nought")
+            wrapp("A Change befalls the hero’s friend")
+            wrapp("Potentially, they meet their end.")
+            print()
+            wrapp("If that be the case, head to the Capital,")
+            wrapp("The Elder beside you, you won’t need a map at all.")
+            wrapp("Friends by your side, the Evil fought off,")
+            wrapp("The curse’s destruction... ")
+            print()
+            wrapp(
+                "Monty's voice trails off. His finger goes past the scorch marks on the page to a lower part of the parchment."
+            )
+            wrapp("He continues...")
+            print()
+            wrapp("...but heed this warning, hesitate,")
+            wrapp("Before the hero's one and eight")
+            wrapp("The curse cannot be touched, don’t try")
+            wrapp("Else all of man will Sleep")
+            wrapp("For all of Time.")
+            print()
+            wrapp("You have been warned.")
+            lbreak()
+            wrapp(
+                "Monty hands the parchment back to Tabbs. She slowly slithers away, putting the prophecy back where it was."
+            )
+            wrapp(
+                "Finally, Monty lifts his staff, looking weary with the effort. \"So you see, now, don't you, "
+                + name +
+                "? The curse, the same one that took Tabbs from me the first time, it's hitting Casey now.\" "
+            )
+            wrapp(
+                "\"To me, the next steps are clear,\" he says. \"I'm obviously the Elder the prophecy refers to, and you're the hero, and Casey's the hero's friend. Thus, we must go to the capital city of Bashapt.\""
+            )
+            wrapp(
+                "\"I'll give you the copy of the prophecy I just made,\" he says. He reaches into his robe and pulls out a piece of parchment that looks identical to the one you just saw Tabbs put away."
+            )
+            addInv(inventory, "PROPHECY")
+            wrapp(
+                "He nods. \"We'll head out right away,\" he says. \"There is no time to waste if we want to break the curse and save Casey. Tabbs, you'll come too.\""
+            )
+            wrapp(
+                "Tabbs perks up. \"Tabbs isss... going out?\" she asks, hope brimming in her eyes. \"Tabbs is practiced with being... sssstealthy!\""
+            )
+            wrapp(
+                "Monty averts his eyes slightly but says, \"Yes, Tabbs. But do keep yourself out of sight. We'll get going in a minute.\""
+            )
+        else:
+            wrapp(
+                "Monty is making some preparations for the journey, flipping through a portable tome he brought with him and occasionally muttering something."
+            )
+            wrapp("Tabbs looks impatient to get out of her chamber.")
+        optlist()
+        cmd, storyProg, textSpeedGLOBAL, textWidthGLOBAL, name, gold, inventory = what(
+            cmd, avail_locs, inventory, room_objs, storyProg, gold,
+            textSpeedGLOBAL, textWidthGLOBAL, name)
+        if cmd == "WELL" or cmd == "W":
+            wrapp("You head out of Tabbs's chamber.")
+            wrapp(
+                "Monty follows you out, and Tabbs slithers towards the exit behind him."
+            )
+            storyProg["roomID"] = 8
+            storyProg["oldManinCHouse"] = 4
+        if cmd == "TABBS" or cmd == "TA":
+            wrapp("You move to Tabbs.")
+            wrapp(
+                "From the waist up, Tabbs looks to be about your mom's age. Maybe younger. The only reason you aren't sure is because she looks... ragged. Her face has monstrous edges to it, like her teeth and the shape of her eyes. Her fingernails are long and sharp."
+            )
+            wrapp(
+                "This makes sense when you look at her from the waist down. Instead of legs, Tabbs's entire lower body is that of a giant snake. You don't know enough about snakes to say which species. Maybe an anaconda or a python."
+            )
+            wrapp(
+                "In her excitement to be ready to leave, she doesn't seem to notice your staring. When was the last time she left her sewer?"
+            )
+        if cmd == "MONTY" or cmd == "MO":
+            if storyProg["oldManinCHouse"] != 999:
+                wrapp("Monty stops flipping through his book for a moment.")
+                wrapp("\"Ah, " + name +
+                      ", what is it? Do you have any more questions for me?\"")
+                convoTree = 1
+                TalkOptions = ["CASEY", "TABBS", "NO"]
+                talklist()
+                cmd = talkwhat(cmd, TalkOptions)
+                while convoTree == 1:
+                    if cmd == "NO" or cmd == "N":
+                        wrapp(
+                            "\"Sure, " + name +
+                            ". If you have any questions absolutely feel free to ask, but I want to be on our way to the Capital sooner rather than later.\""
+                        )
+                        convoTree = 0
+                        storyProg["oldManinCHouse"] = 999
+                    elif cmd == "CASEY" and "CASEY" in TalkOptions or cmd == "C" and "CASEY" in TalkOptions:
+                        wrapp(
+                            "\"What exactly happened to Casey... I don't know the exact details.\""
+                        )
+                        wrapp(
+                            "\"But when I was...\" He lowers his voice. \"your age, my best friend disappeared from her home after a day of intense physical sickness. Six years later, when I turned eighteen, I found her, but the curse had been on her for so long, we were never able to turn her fully human again.\""
+                        )
+                        wrapp(
+                            "\"That's why I want to save Casey sooner rather than later, you understand? I don't know what she's been trapped as, but better to save her now than have her be...\" He glances at Tabbs. \"Less than human.\""
+                        )
+                        cmd == "a"
+                        TalkOptions.remove("CASEY")
+                    elif cmd == "TABBS" and "TABBS" in TalkOptions or cmd == "T" and "TABBS" in TalkOptions:
+                        cmd == "a"
+                        TalkOptions.remove("TABBS")
+                    else:
+                        wrapp(
+                            "Monty doesn't understand what you meant by that.")
+                        talklist()
+                        cmd = talkwhat(cmd, TalkOptions)
+                    if cmd == "a":
+                        wrapp("\"Anything else you want to talk about?\"")
+                        talklist()
+                        cmd = talkwhat(cmd, TalkOptions)
+        if cmd == "SKELETONS" or cmd == "SK":
+            wrapp("The floor is littered with animal skeletons.")
+            wrapp("All of them are dry to the bone.")
+
+    while storyProg["roomID"] == 10:
         lbreak()
 
         wip()
@@ -1285,28 +1775,15 @@ while game == 1:
         avail_locs = []
         room_objs = []
 
-        wrapp("You are in Tabbs's chamber.")
-        if storyProg["tabbsChambIntro"] == 0:
-          wrapp("At first, you don't see any living person. The room is nearly pitch black, with the only light coming from Monty's glowing footprints. Any tiny rays of light that managed to come from the open well far away didn't make it past a few feet into the room.")
-          wrapp("This limited light, however, allows you to see that the floor is littered with animal bones.")
-          wrapp("You just about avoid stepping on a tiny ribcage when you glimpse movement in front of you.")
-          wrapp("You...")
-          TalkOptions = ["CALL OUT", "DO NOTHING"]
-          talklist()
-          cmd = talkwhat(cmd, TalkOptions)
-          if cmd == "C" or cmd == "CALL OUT":
-            wrapp("You call out to Tabbs.")
-          else:
-            wrapp("You are suddenly aware of how heavy your breath is. Was it the climb down the ladder that made your heart start pounding?")
-          wrapp("Perhaps in reaction to the noise you made, the movement you weren't even 100% sure was there suddenly stops. Then it starts again. A ray of light glints off what you realize are scales, moving closer and closer to you.")
-          wrapp("You take a step back. The creature, whatever it is, seems to be massive, as it feels like the whole room is coming to life. You look back at Monty, but he nods at you. What's that supposed to mean!?")
-          storyProg["tabbsChambIntro"] = 1
-        else:
-          wrapp("")  
+        wrapp("You are on the journey to Jorts.")
         optlist()
         cmd, storyProg, textSpeedGLOBAL, textWidthGLOBAL, name, gold, inventory = what(
             cmd, avail_locs, inventory, room_objs, storyProg, gold,
             textSpeedGLOBAL, textWidthGLOBAL, name)
+
+
+
+
 
     while storyProg["roomID"] == 1000:
         lbreak()
@@ -1317,6 +1794,7 @@ while game == 1:
         room_objs = []
 
         wrapp("")
+
         optlist()
         cmd, storyProg, textSpeedGLOBAL, textWidthGLOBAL, name, gold, inventory = what(
             cmd, avail_locs, inventory, room_objs, storyProg, gold,
@@ -1325,15 +1803,19 @@ while game == 1:
         cmd = yesno(cmd)
 
         convoTree = 1
-        TalkOptions = ["NO"]
+        TalkOptions = ["NO", "EXAMPLE"]
         talklist()
         cmd = talkwhat(cmd, TalkOptions)
         while convoTree == 1:
             if cmd == "NO" or cmd == "N":
                 wrapp("")
                 convoTree = 0
+            elif cmd == "EXAMPLE" and "EXAMPLE" in TalkOptions or cmd == "E" and "EXAMPLE" in TalkOptions:
+                wrapp("")
+                cmd == "a"
+                TalkOptions.remove("EXAMPLE")
             else:
-                wrapp(" doesn't understand what you meant by that.")
+                wrapp("[CHARACTER] doesn't understand what you meant by that.")
                 talklist()
                 cmd = talkwhat(cmd, TalkOptions)
             if cmd == "a":
