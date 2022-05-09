@@ -4,6 +4,16 @@ storyProg = {}
 
 varlist = []
 
+
+def flush_input():
+    try:
+        import msvcrt
+        while msvcrt.kbhit():
+            msvcrt.getch()
+    except ImportError:
+        import sys, termios    #for linux/unix
+        termios.tcflush(sys.stdin, termios.TCIOFLUSH)
+
 def wip():
     wrapp("Room not complete yet!")
     wrapp("Use devroute to TP to a room that works.")
@@ -24,7 +34,7 @@ room_objs = []
 cmd = ""
 
 textWidthGLOBAL = 48
-textSpeedGLOBAL = 0.04
+textSpeedGLOBAL = 0.0
 
 def textInit(speedlocal, widthlocal): 
   global textWidthGLOBAL
@@ -51,9 +61,7 @@ def save(storyProg, gold, inventory):
   print("Save complete!")
   print(json.dumps(saveFileContent))
 
-import textwrap
-import sys
-import time
+
 
 def addInv(inventory, Item):
   inventory.append(Item)
@@ -72,6 +80,10 @@ def cashier(catalog, gold, cmd):
     cmd = input("What do you want to buy? ").upper()
     return cmd
 
+import textwrap
+import sys
+import time
+
 def instaWrapp(string):
   global textWidthGLOBAL
   #global textSpeedGLOBAL
@@ -83,7 +95,8 @@ def instaWrapp(string):
 def wrapp(string):
     global textWidthGLOBAL
     global textSpeedGLOBAL
-    if textSpeedGLOBAL != 0:
+    textlocalSpeed = textSpeedGLOBAL
+    if textlocalSpeed != 0:
         string = string + "\n"
         approachWidth = 0
         for element in string.split(" "):
@@ -95,13 +108,15 @@ def wrapp(string):
             for c in range(len(element)):
                 sys.stdout.write(element[c])
                 sys.stdout.flush()
-                time.sleep(textSpeedGLOBAL)
+                time.sleep(textlocalSpeed)
+                
         sys.stdout.write("\b")
     else:  #for non-scrolling text
         wrapper = textwrap.TextWrapper(width=textWidthGLOBAL)
         word_list = wrapper.wrap(text=string)
         for element in word_list:
             print(element)
+    #flush_input()
 
 def shop(itemname,catalog,gold):
     cmd = ""
@@ -132,8 +147,9 @@ def optlist():
 def textSettings():
   global textSpeedGLOBAL
   global textWidthGLOBAL
-  print("NOTE: Text speed measured in hundredth of a second per character, and width in characters per line.")
-  print("Define global text display settings now: ")
+  instaWrapp("WARNING: Enabling the text scrolling effect, while cool and nostalgic, does cause some issues with gameplay, as every input you give while text is appearing is recorded. This is the system working as intended, but it does mean that if you mash enter you have to sit through the same text a million times. This can annoy some players, so only enable the effect if you understand this potential.")
+  instaWrapp("Text speed measured in hundredth of a second per character, and width in characters per line.")
+  instaWrapp("Define global text display settings now: ")
   settingsUnset = 0
   cmd = ""
   while settingsUnset == 0:
@@ -142,7 +158,7 @@ def textSettings():
       rows, columns = subprocess.check_output(['stty', 'size']).split()
       column = str(columns)
       colum = int(column[2:-1])
-      print("Your current shell width is " + str(colum) + " characters.")
+      instaWrapp("Your current shell width is estimated to be " + str(colum) + " characters.")
       textWidthGLOBAL = input("(default 48) textWidth = ")
       try:
           if textWidthGLOBAL != "":
@@ -158,7 +174,7 @@ def textSettings():
       textWidthGLOBAL = int(textWidthGLOBAL)
     badNumb = 2
     while badNumb == 2:
-      textSpeedGLOBAL = input("(default 4. 0 to disable scroll effect.) textSpeed = ")
+      textSpeedGLOBAL = input("(default disabled. recommended 1-10, 1 being fastest.) textSpeed = ")
       try: 
         if textSpeedGLOBAL != "":
           tempVar = int(textSpeedGLOBAL)
@@ -168,7 +184,7 @@ def textSettings():
       else:
         badNumb = 1
     if textSpeedGLOBAL == "":
-      textSpeedGLOBAL = 0.04
+      textSpeedGLOBAL = 0.0
     else:
       textSpeedGLOBAL = float(textSpeedGLOBAL)/100
     wrapp("Text width set to " + str(textWidthGLOBAL) +" and text speed set to " + str(textSpeedGLOBAL) + ". Are these settings acceptable?")
@@ -253,6 +269,11 @@ def what(cmd, avail_locs, inventory, room_objs, storyProg, gold, textSpeedGLOBAL
         save(storyProg, gold, inventory)
     if cmd == "LOAD":
         storyProg, gold, inventory = load(storyProg, gold, inventory)
+    if cmd == "CUSTLOAD":
+        print("Copy/paste your save file below:")
+        custfile = input()
+        saveFileContent = json.loads(custfile)
+        storyProg,gold,inventory = saveFileContent
     if cmd == "WALLET" and "WALLET" in inventory:
         wrapp("You check your wallet.")
         wrapp("Your ID proudly states that you're 46 now!")
@@ -372,6 +393,11 @@ def tutorialWhat(cmd, avail_locs, inventory, room_objs, storyProg, gold, textSpe
         save(storyProg, gold, inventory)
     if cmd == "LOAD":
         storyProg, gold, inventory = load(storyProg, gold, inventory)
+    if cmd == "CUSTLOAD":
+        print("Copy/paste your save file below:")
+        custfile = input()
+        saveFileContent = json.loads(custfile)
+        storyProg,gold,inventory = saveFileContent
     if cmd == "QUIT":
         wrapp("Are you sure you would like to quit?")
         cmd = yesno(cmd)
